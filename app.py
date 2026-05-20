@@ -26,10 +26,13 @@ from reportlab.platypus.flowables import Flowable
 
 # ── App setup ────────────────────────────────────────────────────────────────
 load_dotenv()
-app = Flask(__name__)
 
-# Groq client (key from .env)
-groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+if not GROQ_API_KEY:
+    raise ValueError("Missing GROQ_API_KEY environment variable")
+
+groq_client = Groq(api_key=GROQ_API_KEY)
 
 # ── System prompt for the SOC analyst LLM ───────────────────────────────────
 SYSTEM_PROMPT = """You are an elite SOC Tier-3 analyst and MITRE ATT&CK expert.
