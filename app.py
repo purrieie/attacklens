@@ -25,7 +25,7 @@ from reportlab.platypus import (
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
 from reportlab.platypus.flowables import Flowable
 
-# ── App setup ────────────────────────────────────────────────────────────────
+# ── App setup ─────────────────────────────────────────────
 load_dotenv()
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
@@ -33,7 +33,9 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 if not GROQ_API_KEY:
     raise ValueError("Missing GROQ_API_KEY environment variable")
 
-groq_client = Groq(api_key=GROQ_API_KEY)
+
+def get_groq_client():
+    return Groq(api_key=GROQ_API_KEY)
 
 # ── System prompt for the SOC analyst LLM ───────────────────────────────────
 SYSTEM_PROMPT = """You are an elite SOC Tier-3 analyst and MITRE ATT&CK expert.
@@ -88,6 +90,9 @@ Rules:
 # ── Helper: call Groq ────────────────────────────────────────────────────────
 def analyze_with_groq(scenario: str) -> dict:
     """Send scenario to Groq, parse and return structured JSON."""
+
+    groq_client = get_groq_client()
+
     response = groq_client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[
@@ -565,4 +570,4 @@ def generate_pdf_report(data: dict) -> bytes:
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run()
