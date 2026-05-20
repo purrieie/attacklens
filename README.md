@@ -16,6 +16,20 @@ Paste a plain-English incident scenario → get a full SOC-grade report with MIT
 
 ---
 
+## Screenshots
+
+### Home Page
+![Home Page](./screenshots/home.png)
+
+### Incident Analysis
+![Analysis 1](./screenshots/sample_1.png)
+![Analysis 2](./screenshots/sample_2.png)
+
+### Generated PDF Report
+![PDF 1](./screenshots/pdf_1.png)
+![PDF 2](./screenshots/pdf_2.png)
+![PDF 3](./screenshots/pdf_3.png)
+
 ## Quick Start
 
 ### 1 — Clone / download the project
