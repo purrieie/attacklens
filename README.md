@@ -88,22 +88,6 @@ Open your browser at: **http://127.0.0.1:5000**
 4. Browse the full report: summary, timeline, MITRE cards, IOCs, mitigations.
 5. Click **Download PDF Report** for a professionally formatted PDF.
 
-### Sample scenario to test
-
-```
-An employee receives a spear-phishing email purportedly from the company's
-IT helpdesk asking them to verify their Microsoft 365 credentials. The user
-clicks the link and enters credentials on a convincing fake page hosted on a
-recently registered domain (microsoft-helpdesk-verify[.]com). Shortly after,
-sign-ins are observed from an IP address in Eastern Europe. The attacker
-accesses the victim's mailbox, creates a forwarding rule to an external
-Gmail address, and sends internal phishing emails to the finance team
-requesting urgent wire transfers. A second employee in finance clicks a
-link, triggering PowerShell execution. Lateral movement is observed using
-compromised service account credentials obtained via LSASS memory dump.
-```
-
----
 
 ## Project Structure
 
@@ -111,7 +95,7 @@ compromised service account credentials obtained via LSASS memory dump.
 attacklens/
 ├── app.py              ← Flask backend + Groq + PDF generator
 ├── requirements.txt
-├── .env.example
+├── .env
 ├── README.md
 ├── static/
 │   ├── style.css       ← Custom dark cyberpunk CSS
@@ -178,6 +162,25 @@ flowchart TD
 
     C --> P[Vercel Deployment]
 ```
+
+
+### Sample scenario to test
+
+```
+An employee receives a spear-phishing email purportedly from the company's
+IT helpdesk asking them to verify their Microsoft 365 credentials. The user
+clicks the link and enters credentials on a convincing fake page hosted on a
+recently registered domain (microsoft-helpdesk-verify[.]com). Shortly after,
+sign-ins are observed from an IP address in Eastern Europe. The attacker
+accesses the victim's mailbox, creates a forwarding rule to an external
+Gmail address, and sends internal phishing emails to the finance team
+requesting urgent wire transfers. A second employee in finance clicks a
+link, triggering PowerShell execution. Lateral movement is observed using
+compromised service account credentials obtained via LSASS memory dump.
+```
+
+---
+
 ## Notes
 
 - The app requires an active internet connection to reach the Groq API.
