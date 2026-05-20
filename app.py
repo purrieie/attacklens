@@ -9,6 +9,7 @@ import re
 import io
 from datetime import datetime
 from flask import Flask, request, jsonify, render_template, send_file
+app = Flask(__name__)
 from dotenv import load_dotenv
 from groq import Groq
 
