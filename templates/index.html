@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATT&CKLens — AI Incident Analyzer</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ─── Ambient background grid ──────────────────────────────────── -->
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<!-- ─── Header ──────────────────────────────────────────────────── -->
+<header class="site-header">
+  <div class="logo">
+    <span class="logo-icon">⬡</span>
+    <span class="logo-text">ATT&amp;<strong>CK</strong>Lens</span>
+  </div>
+  <nav class="header-nav">
+    <span class="nav-badge">MITRE ATT&amp;CK v14</span>
+    <span class="nav-badge status-live">● LIVE</span>
+  </nav>
+</header>
+
+<!-- ─── Hero / Input ─────────────────────────────────────────────── -->
+<main>
+  <section class="hero">
+    <h1 class="hero-title">AI Incident Analysis<br/><span class="accent">& MITRE ATT&amp;CK Mapper</span></h1>
+    <p class="hero-sub">Paste a cybersecurity incident scenario. The AI will generate a full SOC-grade report, map MITRE ATT&amp;CK techniques, extract IOCs, and score risk — in seconds.</p>
+
+    <div class="input-card">
+      <div class="input-label">
+        <span class="dot"></span> INCIDENT SCENARIO
+      </div>
+      <textarea id="scenarioInput" placeholder="Describe the incident… e.g. An employee received a phishing email pretending to be from Microsoft Support. The user entered credentials into a fake login page. Multiple logins were observed from an unknown geography, mailbox rules were created, and internal phishing emails were sent to colleagues."></textarea>
+      <div class="input-actions">
+        <button class="btn-secondary" id="clearBtn">✕ Clear</button>
+        <button class="btn-primary" id="analyzeBtn">
+          <span class="btn-icon">⚡</span> Analyze Scenario
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Loader ───────────────────────────────────────────────── -->
+  <div class="loader-overlay" id="loader" style="display:none">
+    <div class="loader-box">
+      <div class="loader-ring"></div>
+      <p class="loader-step" id="loaderStep">Initializing…</p>
+      <div class="loader-bar"><div class="loader-bar-fill" id="loaderBar"></div></div>
+    </div>
+  </div>
+
+  <!-- ─── Results ─────────────────────────────────────────────── -->
+  <section class="results" id="results" style="display:none">
+
+    <!-- Top strip: severity + export -->
+    <div class="results-header">
+      <div class="results-meta">
+        <span id="threatClass" class="threat-class-badge"></span>
+        <span id="severityBadge" class="severity-badge"></span>
+        <span id="riskScore" class="risk-score"></span>
+      </div>
+      <button class="btn-export" id="exportPdfBtn">
+        ↓ Download PDF Report
+      </button>
+    </div>
+
+    <!-- Executive Summary -->
+    <div class="panel" id="panelSummary">
+      <div class="panel-header"><span class="panel-icon">📋</span> Executive Summary</div>
+      <div class="panel-body" id="execSummary"></div>
+    </div>
+
+    <!-- Attack Timeline -->
+    <div class="panel" id="panelTimeline">
+      <div class="panel-header"><span class="panel-icon">⏱</span> Attack Flow Timeline</div>
+      <div class="panel-body">
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </div>
+
+    <!-- MITRE ATT&CK Mapping -->
+    <div class="panel" id="panelMitre">
+      <div class="panel-header"><span class="panel-icon">🎯</span> MITRE ATT&amp;CK Mapping</div>
+      <div class="panel-body">
+        <div class="mitre-filter" id="mitreFilter"></div>
+        <div class="mitre-grid" id="mitreGrid"></div>
+      </div>
+    </div>
+
+    <!-- IOC Extraction -->
+    <div class="panel" id="panelIOC">
+      <div class="panel-header"><span class="panel-icon">🔍</span> Indicators of Compromise</div>
+      <div class="panel-body" id="iocContainer"></div>
+    </div>
+
+    <!-- Two-column section -->
+    <div class="two-col">
+
+      <div class="panel">
+        <div class="panel-header"><span class="panel-icon">💥</span> Potential Impact</div>
+        <div class="panel-body"><ul class="info-list" id="potentialImpact"></ul></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header"><span class="panel-icon">🔒</span> Persistence Mechanisms</div>
+        <div class="panel-body"><ul class="info-list" id="persistenceMechanisms"></ul></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header"><span class="panel-icon">↔️</span> Lateral Movement</div>
+        <div class="panel-body"><ul class="info-list" id="lateralMovement"></ul></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header"><span class="panel-icon">🚨</span> Control Failures</div>
+        <div class="panel-body"><ul class="info-list" id="controlFailures"></ul></div>
+      </div>
+
+    </div>
+
+    <!-- Detection & Mitigation -->
+    <div class="panel">
+      <div class="panel-header"><span class="panel-icon">🛡️</span> Detection Opportunities</div>
+      <div class="panel-body"><ul class="info-list" id="detectionOpportunities"></ul></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><span class="panel-icon">🔧</span> Mitigation Recommendations</div>
+      <div class="panel-body"><ul class="info-list" id="mitigationRecs"></ul></div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-icon">🔎</span> Threat Hunting Suggestions</div>
+        <div class="panel-body"><ul class="info-list" id="threatHunting"></ul></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="panel-icon">📁</span> Recommended Log Sources</div>
+        <div class="panel-body"><ul class="info-list" id="logSources"></ul></div>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>ATT&amp;CKLens &copy; 2025 &nbsp;|&nbsp; MITRE ATT&amp;CK® is a trademark of The MITRE Corporation &nbsp;|&nbsp; Powered by Groq</span>
+</footer>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
