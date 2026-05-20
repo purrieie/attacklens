@@ -49,10 +49,9 @@ pip install -r requirements.txt
 ### 4 — Add your Groq API key
 
 ```bash
-cp .env.example .env
+GROQ_API_KEY=your_key_here
 ```
 
-Open `.env` and replace `your_groq_api_key_here` with your key.  
 Get a free key at: https://console.groq.com/keys
 
 ### 5 — Run the Flask app
