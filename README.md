@@ -1,6 +1,6 @@
 # ATT&CKLens — AI Incident Analysis & MITRE ATT&CK Mapper
 
-A production-style AI-powered cybersecurity web application.  
+AI-powered cybersecurity incident analysis platform with automated MITRE ATT&CK mapping, IOC extraction, and SOC-style reporting.
 Paste a plain-English incident scenario → get a full SOC-grade report with MITRE ATT&CK mapping, IOC extraction, risk scoring, attack timeline, and a downloadable PDF report.
 
 ---
@@ -127,7 +127,41 @@ The generated PDF includes:
 - Disclaimer footer
 
 ---
+## Architecture Diagram
 
+```mermaid
+flowchart TD
+
+    A[User Enters Incident Scenario] --> B[Frontend UI<br/>HTML • CSS • JavaScript]
+
+    B --> C[Flask Backend<br/>app.py]
+
+    C --> D[Groq API<br/>Llama 3.3 70B]
+
+    D --> E[AI Incident Analysis Engine]
+
+    E --> F[MITRE ATT&CK Mapping]
+    E --> G[IOC Extraction]
+    E --> H[Risk Scoring]
+    E --> I[Attack Timeline Generation]
+    E --> J[Threat Hunting Recommendations]
+
+    F --> K[Structured JSON Response]
+    G --> K
+    H --> K
+    I --> K
+    J --> K
+
+    K --> L[Frontend Report Rendering]
+
+    K --> M[PDF Report Generator<br/>ReportLab]
+
+    M --> N[Downloadable SOC Report PDF]
+
+    F --> O[MITRE ATT&CK Official Links]
+
+    C --> P[Vercel Deployment]
+```
 ## Notes
 
 - The app requires an active internet connection to reach the Groq API.
